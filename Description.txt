@@ -3,6 +3,7 @@ https://learn.microsoft.com/ru-ru/aspnet/core/tutorials/first-web-api?view=aspne
 https://learn.microsoft.com/ru-ru/aspnet/core/tutorials/web-api-javascript?view=aspnetcore-7.0
 https://learn.microsoft.com/ru-ru/shows/beginners-series-to-web-apis/
 https://learn.microsoft.com/ru-ru/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio
+https://learn.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5
 
 
 Веб-API ASP.Net Core
@@ -86,13 +87,59 @@ Async
 дополнительная информация
 Models
 класс ServiceResponce
-шаблон тип данных для ответа, сообщение успешного исполльзования
+шаблон тип данных для ответа, сообщение успешного использования
 
 интерфейс ICharacterService, класс CharacterService
 добавление ответа ServiceResponse к задаччам 
 класс CharacterService
 новый объект ответа службы в каждом методе
+GetAll - персонажи завернуты в сервисный ответ
 
 --------------
 ... продолжение в Git
 Контроллер и БД
+
+--------------
+Create Data Transfer Objects (DTOs)
+Создание объектов передачи данных
+DTO — это объект, который определяет способ отправки данных по сети
+Клиент не должен получать данные, которые сопоставляются непосредственно с таблицами базы данных
+(веб-API предоставляет клиенту объекты базы данных)
+библиотека, например AutoMapper, выполняет преобразование автоматически
+
+Dtoss -> Character
+создание/получение персонажа
+class AddCharacterDto.cs
+class GetCharacterDto.cs
+класс соответствует модели, для упрощения копируем свойства
+изменение контроллера и службы в соответствии с DTO
+типы не совпадают - нужно сопоставить модели с DTO
+AutoMapper.Extensions.Microsoft.DependencyInjection
+ConfigureServices -> AddAutoMapper 
+CharacterService -> ctor -> IMapper -> создать поле
+сопоставление через _mapper в сервисе
+необъодимо создать карту сопоставлений в профиле для каждого сопоставления, или класс для профилей
+проект -> class AutoMapperProfile.cs
+
+--------------
+обновление персонажа
+ICharacterService.cs
+метод
+Dtos -> Character -> class UpdateCharacterDto
+CharacterService
+реализация интерфейса, quick fix быстрые действия
+CharacterController
+
+--------------
+обработка исключений в сервисе CharacterService
+например существующий id
+поняттное сообщение для пльзователя
+CharacterController
+ответ 200 , персонаж не найден -> вернуть 404
+
+--------------
+удаление персонажа
+интерфейс сервисов и контроллер
+quick fix метод
+сервис копируем с update
+контроллер с get

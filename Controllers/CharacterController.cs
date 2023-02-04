@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RPG.Dtos.Character;
 using RPG.Models;
 using RPG.Services.CharacterService;
 using System;
@@ -16,12 +17,6 @@ namespace RPG.Controllers
         private readonly ILogger<CharacterController> _logger;
         private readonly ICharacterService _characterService;
 
-        //private static List<Character> characters = new List<Character>
-        //{
-        //    new Character(),
-        //    new Character{ Id = 1, Name = "Sam"}
-        //};
-
         public CharacterController(ICharacterService characterService)
         {
             _characterService = characterService;
@@ -34,12 +29,6 @@ namespace RPG.Controllers
             return Ok(await _characterService.GetAllCharacters());
         }
 
-
-        //public CharacterController(ILogger<CharacterController> logger)
-        //{
-        //    _logger = logger;
-        //}
-
         // функция с параметром метода 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSingle(int id)
@@ -50,9 +39,33 @@ namespace RPG.Controllers
 
         // новый персонаж
         [HttpPost]
-        public async Task<IActionResult> AddCharacter(Character newCharacter)
+        public async Task<IActionResult> AddCharacter(AddCharacterDto newCharacter)
         {            
             return Ok(await _characterService.AddCharacter(newCharacter));
+        }
+
+        // обновление персонажа
+        [HttpPut]
+        public async Task<IActionResult> UpdateCharacter(UpdateCharacterDto updateCharacter)
+        {
+            ServiceResponse<GetCharacterDto> response = await _characterService.UpdateCharacter(updateCharacter);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+        // функция с параметром метода 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            ServiceResponse<List<GetCharacterDto>> response = await _characterService.DeleteCharacter(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }
