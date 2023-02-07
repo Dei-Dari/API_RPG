@@ -4,6 +4,8 @@ https://learn.microsoft.com/ru-ru/aspnet/core/tutorials/web-api-javascript?view=
 https://learn.microsoft.com/ru-ru/shows/beginners-series-to-web-apis/
 https://learn.microsoft.com/ru-ru/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-7.0&tabs=visual-studio
 https://learn.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5
+https://youtu.be/Fbf_ua2t6v4
+https://learn.microsoft.com/ru-ru/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5
 
 
 Веб-API ASP.Net Core
@@ -142,4 +144,21 @@ CharacterController
 интерфейс сервисов и контроллер
 quick fix метод
 сервис копируем с update
-контроллер с get
+контроллер с get	
+
+--------------
+БД
+Data -> class DataContext
+Microsoft.EntityFrameworkCore
+Microsoft.EntityFrameworkCore.Design
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools
+appsettings.json - строка подключений БД
+Startup.cs service contextdb
+add-migration
+update-database
+
+--------------
+настройки редактор именования например для private camel стиль с _
+для создать и назначить поле intelli
+?? dbcontext & interface

@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RPG.Data;
 using RPG.Services.CharacterService;
 using System;
 using System.Collections.Generic;
@@ -29,13 +31,11 @@ namespace RPG
         {
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
-            services.AddScoped<ICharacterService, CharacterService>();
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GpioService", Version = "v1" });
-            //});
-
+            services.AddScoped<ICharacterService, CharacterService>();           
             services.AddSwaggerGen();
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(
+                Configuration.GetConnectionString("DefaultConnection")));
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,11 +46,6 @@ namespace RPG
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
-                //app.UseSwaggerUI(options =>
-                //{
-                //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                //    options.RoutePrefix = string.Empty;
-                //});
             }
 
             // app.UseHttpsRedirection();

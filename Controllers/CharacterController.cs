@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RPG.Data;
 using RPG.Dtos.Character;
 using RPG.Models;
 using RPG.Services.CharacterService;
@@ -16,10 +17,16 @@ namespace RPG.Controllers
     {
         private readonly ILogger<CharacterController> _logger;
         private readonly ICharacterService _characterService;
+        private readonly DataContext _context;
 
         public CharacterController(ICharacterService characterService)
         {
             _characterService = characterService;
+        }
+
+        public CharacterController(DataContext context)
+        {
+            _context = context;
         }
 
         [HttpGet("GetAll")]
@@ -34,7 +41,13 @@ namespace RPG.Controllers
         public async Task<IActionResult> GetSingle(int id)
         {
             // return Ok(characters.FirstOrDefault(c => c.Id == id));
-            return Ok(await _characterService.GetCharacterById(id));
+            // return Ok(await _characterService.GetCharacterById(id));
+            ServiceResponse<GetCharacterDto> response = await _characterService.GetCharacterById(id);
+            if (response.Data == null)
+            {
+                return BadRequest("Character not found.");
+            }
+            return Ok(response);
         }
 
         // новый персонаж
@@ -51,7 +64,7 @@ namespace RPG.Controllers
             ServiceResponse<GetCharacterDto> response = await _characterService.UpdateCharacter(updateCharacter);
             if (response.Data == null)
             {
-                return NotFound(response);
+                return NotFound("Character for update not found.");
             }
             return Ok(response);
         }
@@ -63,7 +76,7 @@ namespace RPG.Controllers
             ServiceResponse<List<GetCharacterDto>> response = await _characterService.DeleteCharacter(id);
             if (response.Data == null)
             {
-                return NotFound(response);
+                return NotFound("Character dor delete not found.");
             }
             return Ok(response);
         }
